@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings</title>
+    <link rel="stylesheet" href="/styles.css"> 
+</head>
+<body>
+    <header>
+    <a href="/welcome">Back to the HomePage</a>
+    <h1>Display All Logins</h1>
+    <div class="mascot">🐻 I'm watching your bookings grow!</div>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/book">Login</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/help">Help</a></li>
+       
+        </ul>
+    </nav>
+    </header>
+
+    <form action="/view" method="POST"></form>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>User ID</th>
+                <th>Date and Time</th>
+                <th>Card Number</th>
+                <th>Expiry Date</th>
+                <th>Security Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% bookings.forEach(booking => { %>
+                <tr>
+                    <td><%= booking.name %></td>
+                    <td><%= booking.userId %></td>
+                    <td><%= booking.dateTime.toLocaleString() %></td>
+                    <td><%= booking.cardDetails.cardNumber %></td>
+                    <td><%= booking.cardDetails.expiry %></td>
+                    <td><%= booking.cardDetails.securityCode %></td>
+                    <td>
+                        <form action="/modify/<%= booking._id %>" method="GET" style="display:inline;">
+                            <button type="submit">Modify</button>
+                        </form>
+                        <form action="/delete/<%= booking._id %>" method="POST" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+require('dotenv').config();
+
+const http = require('http');
+const app = require('../app');
+const connectDB = require('../config/db');
+
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+(async () => {
+  await connectDB(process.env.MONGO_URI);
+  http.createServer(app).listen(port, () =>
+    console.log(`🚀 Server running at http://localhost:${port}`)
+  );
+})();
+
+function normalizePort(val){const p=parseInt(val,10);if(isNaN(p))return val;if(p>=0)return p;return false;}

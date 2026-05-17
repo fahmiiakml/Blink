@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="/images/favicon.ico">
+</head>
+<body>
+ <header>
+    <h1>About Blink</h1>
+    <nav class="navbar">
+      <a href="/">🏠 Home</a> |
+      <a href="/book">Log Screen Time</a> |
+      <a href="/screen-time" class="button-link"> View screen time summary</a> |
+      <a href="/help">Help</a>
+    </nav>
+  </header>
+
+  <main class="card" style="max-width: 560px; margin: 1.5rem auto;">
+    <h2>Log a New Entry</h2>
+    <p class="muted">Enter today’s numbers. You can leave fields blank if not applicable.</p>
+
+    <form id="entryForm">
+      <label>Total screen time (hours)</label>
+      <input type="number" step="0.1" min="0" max="24" name="screenTime" required />
+
+      <label>Sleep (hours)</label>
+      <input type="number" step="0.1" min="0" max="24" name="sleepHours" />
+
+      <label>Stress (1–10)</label>
+      <input type="number" min="1" max="10" name="stress" />
+
+      <label>Mood (1–10)</label>
+      <input type="number" min="1" max="10" name="mood" />
+
+      <button type="submit">Save Entry</button>
+      <div id="msg" class="muted" style="margin-top: .75rem;"></div>
+    </form>
+  </main>
+
+  <p style="max-width: 560px; margin: 1.5rem auto;">Here's how screen time correlates to stress!</p>
+
+  <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/regression@2.0.1/dist/regression.min.js"></script>
+
+<div id="parent">
+
+<script>
+async function showGraph() {
+  const res = await fetch('/api/test');
+  const data = await res.json();
+
+  // Build the scatter points
+  const xyValues = data.map(item => ({ 
+    x: item.stress, 
+    y: item.screenTime 
+  }));
+
+  // RUN REGRESSION ***HERE*** after xyValues exists
+  const reg = regression.linear(
+    xyValues.map(p => [p.x, p.y])
+  );
+
+  // Convert regression result into Chart.js format
+  const regLine = reg.points.map(p => ({ x: p[0], y: p[1] }));
+
+  // Draw chart
+  new Chart("myChart", {
+    type: "scatter",
+    data: {
+      datasets: [
+        {
+          label: "Data",
+          pointRadius: 4,
+          pointBackgroundColor: "rgba(0,0,255,1)",
+          data: xyValues
+        },
+        {
+          label: "Regression Line",
+          type: "line",
+          data: regLine,
+          borderColor: "red",
+          borderWidth: 2,
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          scaleLabel: { display: true, labelString: 'Screen Time' }
+        }],
+        xAxes: [{
+          scaleLabel: { display: true, labelString: 'Stress' }
+        }]
+      }
+    }
+  });
+}
+
+showGraph();
+</script>
+
+</div>
+
+  <section class="card" style="max-width: 720px; margin: 1.5rem auto;">
+    <h3>Recent Entries</h3>
+    <div id="recent"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Blink</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById('entryForm');
+    const msg  = document.getElementById('msg');
+    const recent = document.getElementById('recent');
+
+    function toNum(v){ const n = Number(v); return isNaN(n) ? undefined : n; }
+
+    async function loadRecent(){
+      const res = await fetch('/api/entries');
+      const data = await res.json();
+      if (!Array.isArray(data) || !data.length){
+        recent.innerHTML = '<p class="muted">No entries yet.</p>';
+        return;
+      }
+      recent.innerHTML = `
+        <table border:1px solid red class="table">
+          <thead><tr> 
+            <th>Date</th><th>Screen</th><th>Sleep</th><th>Stress</th><th>Mood</th>
+          </tr></thead>
+          <tbody>
+            ${data.map(d=>`
+              <tr>
+                <td>${new Date(d.createdAt).toLocaleString()}</td>
+                <td>${d.screenTime ?? ''}</td>
+                <td>${d.sleepHours ?? ''}</td>
+                <td>${d.stress ?? ''}</td>
+                <td>${d.mood ?? ''}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.textContent = 'Saving…';
+      const body = {
+        screenTime: toNum(form.screenTime.value),
+        sleepHours: toNum(form.sleepHours.value),
+        stress: toNum(form.stress.value),
+        mood: toNum(form.mood.value)
+      };
+      try {
+        const res = await fetch('/api/entries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if(!res.ok) throw new Error(await res.text());
+        msg.textContent = '✅ Saved!';
+        form.reset();
+        loadRecent();
+      } catch(err){
+        msg.textContent = ' Failed to save entry';
+        console.error(err);
+      }
+    });
+
+    loadRecent();
+  </script>
+</body>
+</html>

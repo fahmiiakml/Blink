@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="/images/favicon.ico">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="/">🏠 Back to Home</a> |
+      <a href="/book">Log screen time</a> | 
+      <a href="/help">Help</a> |
+      <a href="/about">About</a>
+    </nav>
+    
+    <h1><%= title %></h1>
+    
+    <p>
+      📱 People aged 18-24 spend an average of
+      <strong><%= stats.averageHours %> hours</strong> on screens daily.
+    </p>
+    <p>Top apps: <%= stats.topApps.join(', ') %></p>
+    <p>
+      ⏱️ You’ve spent
+      <span id="blink-time"><%= totalTime %></span>
+      seconds on Blink today.
+    </p>
+
+    <% if (typeof lastEntryHours !== 'undefined' && lastEntryHours !== null) { %>
+    <p>
+      🕒 Your most recent logged screen time: 
+      <strong><%= lastEntryHours %> hours</strong>.
+    </p>
+    <% } else { %>
+      <p class="muted">
+        You haven’t logged any sessions yet.
+        <a href="/book">Log your first screen time entry</a>.
+      </p>
+    <% } %>
+
+  </header>
+
+
+  <!-- NEW: Kaggle comparison card -->
+  <section class="card" style="max-width:720px; margin:1.5rem auto;">
+    <h2> How you compare to others</h2>
+
+    <% if (comparison && comparison.you) { %>
+      <p>
+        Based on our professional dataset of students screentime, the average screen time for
+        <strong><%= comparison.population.ageGroup %></strong> is
+        <strong><%= comparison.population.avgScreenTime %> hours/day</strong>
+        (sample size: <%= comparison.population.sampleSize %> people).
+      </p>
+      
+      <p>
+        Your usage is higher than
+        <strong><%= comparison.percentile %>%</strong>
+        of people in the <%= stats.ageGroup %> group.
+        
+      </p>
+    
+
+      <p><em><%= comparison.interpretation %></em></p>
+
+    <% } else { %>
+      <p class="muted">
+        Log your screen time on the <a href="/book">Log</a> page to see how you compare
+        to the wider population.
+      </p>
+    <% } %>
+    <% if (recommendations && recommendations.length) { %>
+  <h2> Recommendations</h2>
+  <ul>
+    <% recommendations.forEach(r => { %>
+      <li><%= r %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+
+  </section>
+
+
+
+  <footer>
+    <p>&copy; 2025 Blink</p>
+  </footer>
+
+  <!--  Screen Time Tracker -->
+  <script>
+    const startTime = Date.now();
+
+    // Live counter
+    const span = document.getElementById('blink-time');
+    setInterval(() => {
+      const secs = Math.round((Date.now() - startTime) / 1000);
+      span.textContent = (Number(<%- JSON.stringify(totalTime) %>) + secs).toString();
+    }, 1000);
+
+    /*
+    window.addEventListener('beforeunload', () => {
+      const duration = Math.round((Date.now() - startTime) / 1000);
+      navigator.sendBeacon
+        ? navigator.sendBeacon(
+            '/track-time',
+            new Blob([JSON.stringify({ duration })], { type: 'application/json' })
+          )
+        : fetch('/track-time', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ duration })
+          });
+    });
+    */
+  </script>
+</body>
+</html>

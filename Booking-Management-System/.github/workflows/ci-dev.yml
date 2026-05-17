@@ -1,0 +1,14 @@
+name: Dev Branch CI
+
+on:
+  push:
+    branches: [ "dev" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Maven Build
+        run: mvn -B package --file pom.xml

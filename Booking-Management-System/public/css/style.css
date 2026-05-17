@@ -1,0 +1,186 @@
+/* Global Reset & Font */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Quicksand', sans-serif;
+  background-color: #ffe4ec;
+  color: #d6336c;
+  line-height: 1.6;
+}
+
+/* Header & Mascot */
+header {
+  text-align: center;
+  padding: 2rem 1rem;
+  background-color: #ffccdd;
+  border-bottom: 2px solid #f48fb1;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+header p {
+  font-size: 1.2rem;
+  margin-top: 0;
+}
+
+.mascot {
+  font-size: 3rem;
+  margin-top: 1rem;
+}
+
+/* Navigation */
+nav {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+nav a {
+  margin: 0 1rem;
+  text-decoration: none;
+  font-weight: bold;
+  color: #d6336c;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Section Styling */
+section.intro {
+  text-align: center;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+section.dashboard {
+  padding: 2rem;
+}
+
+/* Buttons */
+.start-btn,
+button,
+input[type="submit"] {
+  display: inline-block;
+  background-color: #ff80ab;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  margin: 1rem auto;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.start-btn:hover,
+button:hover,
+input[type="submit"]:hover {
+  background-color: #f06292;
+}
+
+/* Form Styling */
+form {
+  max-width: 600px;
+  margin: 2rem auto;
+  background-color: #fff0f5;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(255, 128, 171, 0.3);
+}
+
+form label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+form input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  border: 1px solid #f48fb1;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.table, th, td {
+  width:100%;
+  table-layout:fixed;
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 15px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #c2185b;
+  background-color: #ffe4ec;
+  border-top: 2px solid #f48fb1;
+}
+.mascot2 {
+  display: inline-block;
+  font-size: 2rem; /* adjust size */
+  animation: shake 0.3s infinite;
+}
+.mascot2 {
+  text-decoration: none;
+  color: inherit; /* or set a custom color */
+}
+
+@keyframes shake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(2px, 0) rotate(5deg); }
+  50% { transform: translate(-2px, 0) rotate(-5deg); }
+  75% { transform: translate(2px, 0) rotate(5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* Booking List */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #fff;
+  margin: 0.5rem 0;
+  padding: 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(255, 128, 171, 0.2);
+}
+
+/* Mascot Link Styling */
+a.mascot {
+  text-decoration: none;
+  color: inherit;     /* Keep the same color as normal text or its parent */
+}
+
+a.mascot:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+a.mascot1 {
+  text-decoration: none;
+  color: inherit;     /* Keep the same color as normal text or its parent */
+}
+
+#parent {
+    width: 30%;
+    margin: 0 auto;
+}
+
+canvas{
+    margin: 0 auto;
+    }
+
+a.bath {
+    text-decoration: none;
+}
