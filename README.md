@@ -1,3 +1,7 @@
+Nama Kelompok
+Fahmi Akmal
+Dio Fajar Nugraha
+
 Blink
 
 Blink adalah aplikasi sederhana untuk membantu pengguna memahami kebiasaan penggunaan layar (screen time) sehari-hari. Aplikasi ini mencatat aktivitas pengguna, menampilkan ringkasan penggunaan, serta membandingkan data pengguna dengan rata-rata kelompok usia 18–24 tahun.
